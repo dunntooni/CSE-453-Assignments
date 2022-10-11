@@ -1,3 +1,5 @@
+cannon_dir = "/users/joe/test/"
+
 def displayMenu():
     # comment
     return
