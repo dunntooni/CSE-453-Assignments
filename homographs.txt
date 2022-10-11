@@ -1,0 +1,4 @@
+./test.txt
+../../cse453/week05/test.txt
+../week05/test.txt
+C:/../../cse453/week05/test.txt
