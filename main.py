@@ -1,4 +1,5 @@
 def displayMenu():
+    # comment
     return
 
 def canonicalize():
