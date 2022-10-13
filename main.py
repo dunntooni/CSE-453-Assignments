@@ -9,7 +9,7 @@ def displayMenu():
 
 
 def canonicalize(url):
-    x = re.sub("/[^.]./", "", url)
+    x = re.sub("(?<!\.)\.[\/\\\\]", "", url)
     return x
 
 
@@ -26,3 +26,4 @@ def compareHomographs():
 
 if __name__ == '__main__':
     print(canonicalize("./././.././test.txt"))
+    print(canonicalize(".\.\././test.txt"))
