@@ -1,7 +1,7 @@
 from collections import UserString
 import re
 
-canon_dir = "/users/joe/test/test.txt"
+canon_dir = "C:/users/bob/test.txt"
 
 
 def displayMenu():
@@ -13,14 +13,35 @@ def displayMenu():
     return userInput
 
 
-def canonicalize(url):
-    x = re.sub("(?<!\.)\.[\/\\\\]", "", url)
-    return x
+def canonicalize(filepath):
+    # Sanitize the inputted file
+    filepath = filepath.lower()
+    canon = re.sub("[\/\\\\]+", "\\\\", filepath) # This ugly bit of regex turns all instances of multiple \ or / into a single \
+    canon = re.sub("(?<!\.)\.\\\\", "", canon)    # This deletes all instances of ".\"
 
+    # Split the string into a list and parse it
+    list = re.split("[\/\\\\]", canon)
+    newURL = ["users", "bob"] # We're using forward slashes to avoid having to do escapes and getting confused
+    isFirst = True
+    for item in list:
+        if isFirst:
+            isFirst = False
+            if item == '..':
+                newURL.pop()
+            else:
+                newURL = []
+                newURL.push(item)
+        else:
+            if item == "..":
+            
+            else:
+                
+
+    print(list)
+    return canon
 
 def isHomograph(f1, f2):
-    return True
-
+     return canonicalize(f1) == canonicalize(f2)
 
 def compareNonHomographs(f1, f2):
     return
@@ -31,8 +52,6 @@ def compareHomographs(f1, f2):
 
 
 def compareTwoFilePaths():
-    print(canonicalize("./././.././test.txt"))
-    print(canonicalize(".\.\././test.txt"))
     file1 = input("Input the name of the first file: ")
     file2 = input("Input the name of the second file: ")
     file1 = canonicalize(file1)
