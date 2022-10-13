@@ -1,3 +1,5 @@
+import re
+
 canon_dir = "/users/joe/test/test.txt"
 
 
@@ -6,8 +8,9 @@ def displayMenu():
     return
 
 
-def canonicalize():
-    return
+def canonicalize(url):
+    x = re.sub("/[^.]./", "", url)
+    return x
 
 
 def isHomograph():
@@ -21,9 +24,5 @@ def compareNonHomographs():
 def compareHomographs():
     return
 
-
-def main():
-    return
-
-
-main()
+if __name__ == '__main__':
+    print(canonicalize("./././.././test.txt"))
