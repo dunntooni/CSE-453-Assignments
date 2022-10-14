@@ -21,24 +21,28 @@ def canonicalize(filepath):
 
     # Split the string into a list and parse it
     list = re.split("[\/\\\\]", canon)
-    newURL = ["users", "bob"] # We're using forward slashes to avoid having to do escapes and getting confused
+    path_pieces = ["users", "bob"] # We're using forward slashes to avoid having to do escapes and getting confused
     isFirst = True
     for item in list:
         if isFirst:
             isFirst = False
             if item == '..':
-                newURL.pop()
+                path_pieces.pop()
+
             else:
-                newURL = []
-                newURL.push(item)
+                path_pieces = []
+                if item != "c:":
+                    path_pieces.append(item)
         else:
             if item == "..":
-            
+                if(len(path_pieces) > 0):
+                    path_pieces.pop()
             else:
-                
-
-    print(list)
-    return canon
+                if item != "c:":
+                    path_pieces.append(item)
+    filepath = "\\".join(path_pieces)
+    filepath = "C:\\" + filepath
+    return filepath
 
 def isHomograph(f1, f2):
      return canonicalize(f1) == canonicalize(f2)
