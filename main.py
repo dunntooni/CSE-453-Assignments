@@ -20,7 +20,7 @@ def canonicalize(filepath):
 
     # Split the string into a list and parse it. Each list item should be a directory or a relative filepath directive
     list = re.split("[\/\\\\]", canon)
-
+    
     # This is what we are assuming the current working directory is. i.e. "c:\users\bob"
     path_pieces = ["users", "bob"]
     
