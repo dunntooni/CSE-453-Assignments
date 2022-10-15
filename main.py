@@ -16,35 +16,55 @@ def displayMenu():
 def canonicalize(filepath):
     # Sanitize the inputted file
     filepath = filepath.lower()
-    canon = re.sub("[\/\\\\]+", "\\\\",
-                   filepath)  # This ugly bit of regex turns all instances of multiple \ or / into a single \
-    canon = re.sub("(?<!\.)\.\\\\", "",
-                   canon)    # This deletes all instances of ".\"
+    canon = re.sub("[\/\\\\]+", "\\\\", filepath)  # This ugly bit of regex turns all instances of multiple \ or / into a single \
 
-    # Split the string into a list and parse it
+    # Split the string into a list and parse it. Each list item should be a directory or a relative filepath directive
     list = re.split("[\/\\\\]", canon)
-    # We're using forward slashes to avoid having to do escapes and getting confused
+    
+    # This is what we are assuming the current working directory is. i.e. "c:\users\bob"
     path_pieces = ["users", "bob"]
+    
+    # we need to do a special check with the first item to see if we're dealing with a relative or absolute filepath
     isFirst = True
     for item in list:
+        #The first item is a special case and we use it to determine if the filepath is absolute or relative
         if isFirst:
             isFirst = False
+            # relative file path where we move back a directory
             if item == '..':
                 path_pieces.pop()
 
+            # relative file path so we want to stay in the current directory
+            elif item == ".":
+                continue
+            
+            # absolute filepath so we need to start from root
             else:
                 path_pieces = []
+                # we add the root directory at the end to the canonized version so we don't want duplicates
                 if item != "c:":
                     path_pieces.append(item)
         else:
+            # go up a directory level
             if item == "..":
+                # we can't go back a directory if we're already at root
                 if(len(path_pieces) > 0):
                     path_pieces.pop()
+            
+            # ./ case we remain in current directory
+            elif item == ".":
+                continue
+            
+            # add another directory or filename to the filepath
             else:
+                # we add the root directory at the end to the canonized version so we don't want duplicates
                 if item != "c:":
                     path_pieces.append(item)
+    
+    # frankenstein our filepath together 
     filepath = "\\".join(path_pieces)
     filepath = "C:\\" + filepath
+    
     return filepath
 
 
