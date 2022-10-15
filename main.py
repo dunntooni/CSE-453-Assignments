@@ -16,12 +16,15 @@ def displayMenu():
 def canonicalize(filepath):
     # Sanitize the inputted file
     filepath = filepath.lower()
-    canon = re.sub("[\/\\\\]+", "\\\\", filepath) # This ugly bit of regex turns all instances of multiple \ or / into a single \
-    canon = re.sub("(?<!\.)\.\\\\", "", canon)    # This deletes all instances of ".\"
+    canon = re.sub("[\/\\\\]+", "\\\\",
+                   filepath)  # This ugly bit of regex turns all instances of multiple \ or / into a single \
+    canon = re.sub("(?<!\.)\.\\\\", "",
+                   canon)    # This deletes all instances of ".\"
 
     # Split the string into a list and parse it
     list = re.split("[\/\\\\]", canon)
-    path_pieces = ["users", "bob"] # We're using forward slashes to avoid having to do escapes and getting confused
+    # We're using forward slashes to avoid having to do escapes and getting confused
+    path_pieces = ["users", "bob"]
     isFirst = True
     for item in list:
         if isFirst:
@@ -44,40 +47,59 @@ def canonicalize(filepath):
     filepath = "C:\\" + filepath
     return filepath
 
+
 def isHomograph(f1, f2):
-     return canonicalize(f1) == canonicalize(f2)
-
-def compareNonHomographs(f1, f2):
-    return
+    return canonicalize(f1) == canonicalize(f2)
 
 
-def compareHomographs(f1, f2):
-    return
+def compareNonHomographs():
+    nonHomographFileNames = open("non-homographs.txt", "r")
+    print("\nRunning tests on non-homographs.txt...")
+    isError = False
+    for filename in nonHomographFileNames:
+        filename = filename.replace('\n', '')
+        isNonHomograph = not isHomograph(filename, canon_dir)
+        if isNonHomograph == False:
+            print("Error: ", filename, " is a homograph with ", canon_dir,)
+            isError = True
+    if isError:
+        print("One or more lines were homographs. Test failed.")
+    else:
+        print("No errors detected. Success!")
+
+
+def compareHomographs():
+    homographFileNames = open("homographs.txt", "r")
+    print("\nRunning tests on homographs.txt...")
+    isError = False
+    for filename in homographFileNames:
+        filename = filename.replace('\n', '')
+        isAHomograph = isHomograph(filename, canon_dir)
+        if isAHomograph == False:
+            print("ERROR:", filename, "is not a homograph with", canon_dir)
+            isError = True
+    if isError:
+        print("One or more lines were not homographs. Test failed.")
+    else:
+        print("No errors detected. Success!")
 
 
 def compareTwoFilePaths():
     file1 = input("Input the name of the first file: ")
     file2 = input("Input the name of the second file: ")
-    file1 = canonicalize(file1)
-    file2 = canonicalize(file2)
-    print(file1)
-    print(file2)
-
     homograph = isHomograph(file1, file2)
 
-    if homograph == True:  # This logic might not be correct. Feel free to revise if it isn't.
-        compareHomographs(file1, file2)
+    if homograph == True:
+        print(file1, " and ", file2, " are homographs.")
     else:
-        compareNonHomographs(file1, file2)
-
-
-def executeTestCases():
-    return
+        print(file1, " and ", file2, " are not homographs.")
 
 
 if __name__ == '__main__':
     userInput = displayMenu()
     if userInput == "A":
-        executeTestCases()
+        # Test cases for homographs.
+        compareHomographs()
+        compareNonHomographs()
     else:
         compareTwoFilePaths()
