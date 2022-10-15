@@ -2,7 +2,7 @@
 C:/users/bob/test.txt
 ../bob/test.txt
 C:/././users/bob/test.txt
-/././users/../users//bob/test.txt
+./././users/../users//bob/test.txt
 C:/users/bob/../../users/bob/../../users/bob/test.txt
 ../../users/./bob/./test.txt
 ../bob/../bob/../bob/../bob/../bob/../bob/test.txt
