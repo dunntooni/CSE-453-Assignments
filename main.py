@@ -64,7 +64,7 @@ def canonicalize(filepath):
     # frankenstein our filepath together 
     filepath = "\\".join(path_pieces)
     filepath = "C:\\" + filepath
-    print ("canon filepath is: " + filepath)
+    
     return filepath
 
 
