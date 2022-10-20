@@ -1,5 +1,5 @@
 def genQuery(username, password):
-    sql = f"SELECT * FROM table WHERE 'user = {username}' AND 'password = {password}'"
+    sql = f"SELECT * FROM table WHERE 'user = {username}' AND 'userPassword = {password}'"
     return sql
 
 def genQueryWeak(username, password):
