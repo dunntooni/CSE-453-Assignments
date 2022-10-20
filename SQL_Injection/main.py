@@ -1,5 +1,5 @@
 def genQuery(username, password):
-    sql = ""
+    sql = f"SELECT * FROM table WHERE 'user = {username}' AND 'password = {password}'"
     return sql
 
 def genQueryWeak(username, password):
@@ -10,8 +10,15 @@ def genQueryStrong(username, password):
     sql = ""
     return sql
 
-def testValid():
-    pass
+def testValid(queryGenerator):
+    print("TESTING VALID INPUTS")
+    print("********************")
+
+    test_cases = [("ValidUsername", "Valid_Password")]
+    for test in test_cases:
+        print(f"Username: {test[0]}  Password: {test[1]}")
+        sql = queryGenerator(test[0], test[1])
+        print(f"SQL statement is:    {sql}")
 
 def testTautology():
     pass
@@ -26,4 +33,4 @@ def testComment():
     pass
 
 if __name__ == '__main__':
-    testValid()
+    testValid(genQuery)
