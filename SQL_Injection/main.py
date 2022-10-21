@@ -16,8 +16,8 @@ def genQueryWeak(username, password):
 # match any existing usernames or passwords, the whole input is rejected as bad input.
 def genQueryStrong(username, password):
     #In a real system, these would be grabbed from a database in the background. For this purpose this is fine
-    knownUsernames = ["ValidUsername", "Erick", "ikeypoo"]
-    knownPasswords = ["Valid_Password", "coolEpicPassword97", "DankchickyNuggies_1"]
+    knownUsernames = ["ValidUsername", "Erick", "ikeypoo", "jimbob"]
+    knownPasswords = ["Valid_Password", "coolEpicPassword97", "DankchickyNuggies_1", "password"]
     
     #If the username matches a known username, allow it to be plugged in to the sql statement 
     sqlUsername = ""
@@ -39,7 +39,8 @@ def testValid(queryGenerator):
 
     test_cases = [("ValidUsername", "Valid_Password"),
                   ("ikeypoo", "coolEpicPassword97"),
-                  ("Erick", "DankchickyNuggies_1")]
+                  ("Erick", "DankchickyNuggies_1"),
+                  ("jimbob", "password")]
     for test in test_cases:
         print(f"\tTesting with inputs: Username = \"{test[0]}\"  Password = \"{test[1]}\"")
         sql = queryGenerator(test[0], test[1])
@@ -53,7 +54,8 @@ def testTautology(queryGenerator):
 
     test_cases = [("bob", "none' OR 'x' = 'x"), 
                   ("ikeypoo", "password' OR 'password lol' = 'password lol"), 
-                  ("Erick", "asdf' OR 'blackTv_123' = 'blackTv123"),]
+                  ("Erick", "asdf' OR 'blackTv_123' = 'blackTv123"),
+                  ("jimbob", "hopeIsDescending' OR '1' = '1")]
     for test in test_cases:
         print(f"\tTesting with inputs: Username = \"{test[0]}\"  Password = \"{test[1]}\"")
         sql = queryGenerator(test[0], test[1])
@@ -67,7 +69,8 @@ def testUnion(queryGenerator):
 
     test_cases = [("bob", "gobbledygook' UNION SELECT * FROM users;--"), 
                   ("ikeypoo", "gabbagoo' UNION SELECT * FROM authData;--"),
-                  ("Erick", "main_admin' UNION SELECT * FROM users;--")]
+                  ("Erick", "main_admin' UNION SELECT * FROM users;--"),
+                  ("jimbob", "valjean' UNION SELECT * FROM authData;--")]
     for test in test_cases:
         print(f"\tTesting with inputs: Username = \"{test[0]}\" Password = \"{test[1]}\"")
         sql = queryGenerator(test[0], test[1])
@@ -81,7 +84,8 @@ def testAddState(queryGenerator):
 
     test_cases = [("Erick", "asdf' ; INSERT INTO users (userName, userPassword) VALUES ('Erick', '6969'); -- "), 
                   ("regular_joe", "password'; DROP TABLE users;--"),
-                  ("ikeypoo", "funnypasswordhaha'; INSERT INTO authData (userName, accessLevel) VALUES ('ikeypoo', 'Admin'); --")]
+                  ("ikeypoo", "funnypasswordhaha'; INSERT INTO authData (userName, accessLevel) VALUES ('ikeypoo', 'Admin'); --"),
+                  ("jimbob", "trumpCard'; DROP TABLE authData;--")]
     for test in test_cases:
         print(f"\tTesting with inputs:  Username = \"{test[0]}\" Password \"{test[1]}\"")
         sql = queryGenerator(test[0], test[1])
@@ -95,7 +99,8 @@ def testComment(queryGenerator):
 
     test_cases = [("Root'; --", "nothing_lol"), 
                   ("BestUser';--", "You've been hacked!"),
-                  ("Erick';--", "Sucks to be you XD")]
+                  ("Erick';--", "Sucks to be you XD"),
+                  ("jimbob';--", "Monologue Time")]
     for test in test_cases:
         print(f"\tTesting with inputs: Username = \"{test[0]}\"  Password = \"{test[1]}\"")
         sql = queryGenerator(test[0], test[1])
