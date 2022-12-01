@@ -14,16 +14,17 @@ import messages, control
 # User has a name and a password
 ###############################################################
 class User:
-    def __init__(self, name, password):
+    def __init__(self, name, password, clearance):
         self.name = name
         self.password = password
+        self.clearance = clearance
 
 userlist = [
-   [ "AdmiralAbe",     "password" ],  
-   [ "CaptainCharlie", "password" ], 
-   [ "SeamanSam",      "password" ],
-   [ "SeamanSue",      "password" ],
-   [ "SeamanSly",      "password" ]
+   [ "AdmiralAbe",     "password", "Secret"],  
+   [ "CaptainCharlie", "password", "Privileged" ], 
+   [ "SeamanSam",      "password", "Confidential" ],
+   [ "SeamanSue",      "password", "Confidential" ],
+   [ "SeamanSly",      "password", "Confidential" ]
 ]
 
 ###############################################################
@@ -45,7 +46,10 @@ class Interact:
     # Authenticate the user and get him/her all set up
     ##################################################
     def __init__(self, username, password, messages):
-        self._authenticate(username, password)
+        if self._authenticate(username, password):
+            self.control_level = users[self._id_from_user(username)].clearance
+        else:
+            self.control_level = "Public"
         self._username = username
         self._p_messages = messages
 
@@ -55,7 +59,7 @@ class Interact:
     ##################################################
     def show(self):
         id_ = self._prompt_for_id("display")
-        if not self._p_messages.show(id_):
+        if not self._p_messages.show(id_, self.control_level):
             print(f"ERROR! Message ID \'{id_}\' does not exist")
         print()
 
@@ -65,7 +69,7 @@ class Interact:
     ################################################## 
     def display(self):
         print("Messages:")
-        self._p_messages.display()
+        self._p_messages.display(self.control_level)
         print()
 
     ##################################################
@@ -75,7 +79,8 @@ class Interact:
     def add(self):
         self._p_messages.add(self._prompt_for_line("message"),
                              self._username,
-                             self._prompt_for_line("date"))
+                             self._prompt_for_line("date"),
+                             self.control_level)
 
     ##################################################
     # INTERACT :: UPDATE
@@ -86,7 +91,7 @@ class Interact:
         if not self._p_messages.show(id_):
             print(f"ERROR! Message ID \'{id_}\' does not exist\n")
             return
-        self._p_messages.update(id_, self._prompt_for_line("message"))
+        self._p_messages.update(id_, self._prompt_for_line("message"), self.control_level)
         print()
             
     ##################################################
@@ -94,7 +99,7 @@ class Interact:
     # Remove one message from the list
     ################################################## 
     def remove(self):
-        self._p_messages.remove(self._prompt_for_id("delete"))
+        self._p_messages.remove(self._prompt_for_id("delete"), self.control_level)
 
     ##################################################
     # INTERACT :: PROMPT FOR LINE

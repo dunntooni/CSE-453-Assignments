@@ -2,7 +2,7 @@
 # COMPONENT:
 #    MESSAGE
 # Author:
-#    Br. Helfrich, Kyle Mueller, <your name here if you made a change>
+#    Br. Helfrich, Kyle Mueller, Paul Anderson, Torin Bolander
 # Summary: 
 #    This class stores the notion of a message
 ########################################################################
@@ -28,17 +28,19 @@ class Message:
         self._author = ""
         self._date = ""
         self._id = Message._id_next
+        self._control_level = "Public"
         Message._id_next += 1
 
     ##################################################
     # MESSAGE NON-DEFAULT CONSTRUCTOR
     # Create a message and fill it
     ##################################################   
-    def __init__(self, text, author, date):
+    def __init__(self, text, author, date, control_level):
         self._text = text
         self._author = author
         self._date = date
         self._id = Message._id_next
+        self._control_level = control_level
         Message._id_next += 1
         self._empty = False
 
@@ -57,7 +59,7 @@ class Message:
     def display_properties(self):
         if self._empty:
             return
-        print(f"\t[{self._id}] Message from {self._author} at {self._date}")
+        print(f"\t[{self._id}] Message from {self._author} at {self._date}. Control level: {self._control_level}")
 
     ##################################################
     # MESSAGE :: DISPLAY TEXT
@@ -82,3 +84,4 @@ class Message:
         self._author = ""
         self._date = ""
         self._empty = True
+        self._control_level = "Public"
