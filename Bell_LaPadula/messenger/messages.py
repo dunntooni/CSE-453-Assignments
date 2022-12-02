@@ -44,6 +44,7 @@ class Messages:
                     return True
                 else:
                     print("403: Access Denied.")
+                    return True
         return False
 
     ##################################################
